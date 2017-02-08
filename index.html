@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html ng-app="itemList">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="libraries/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="libraries/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="libraries/angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+  </head>
+
+  <body background="images/background.jpg" ng-controller="ProductController as list" ng-app="">
+    <div ng-repeat="product in list.products">
+        <section ng-controller="TabController as tab">
+    <div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <div class="row">
+        <div class="col-md-2"><a href="index.html"><img src="images/JVO.jpg"tab title="Home" alt="JVO mini CL" height="128" width="142"></div>
+        <div class="col-md-8"></div>
+        <div class="col-md-2" id="log"><a href="">Login</a><br><a href="">Sign Up</a></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <select class="btn btn-info" ng-model="searchLocation" ng-click="prefs = true" style="padding:.550rem 1rem;">
+              <option disabled selected value="">Select location</option>
+              <option value="San Francisco">San Francisco</option>
+              <option value="Daly City">Daly City</option>
+              <option value="Oakland">Oakland</option>
+            </select>
+        </div>
+        <div class="col-md-7">
+        <form class="navbar-form navbar-left" role="search">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search" ng-model="searchText">
+    </div>
+</form>
+</div>
+
+    <div class="col-md-2">
+        <div class="nav nav-pills">
+
+            <div ng-class="{active:tab.isSet(0)}" style="text-align:center;">
+              <Button href="" class="btn btn-info" ng-click="tab.setTab(0);searchText=null;prefs = false">Post</button><!-- multiple click events...searchText=null limpia el textbok -->
+            </div>
+          </div>
+    </div>
+    </div>
+      <div class="row"><img ng-hide="searchText.length||tab.isSet(0)||searchLocation.length"  src="images/WhatYouDoMatters2.jpg" alt="buletine board" height="100%" width="100%"><!-- ng-tab.isSet(0) para esconder la imagen incluso cuando el boton post limpia el textbox -->
+        <div id="searchTextResults" ng-show="searchText.length||searchLocation.length||prefs" >
+          <div ng-repeat="articulo in product.articulos | filter:searchText | filter:searchLocation"  class="col-md-6">
+            <p><a href="" ng-click="showDetails = ! showDetails">{{articulo.title}} <strong>{{articulo.price | currency}}</strong></a></p>
+            <img id="galleryImg" ng-src="images/{{articulo.images}}"/>
+            <p>{{articulo.location}} - Price: {{articulo.price | currency}}</p>
+            <hr>
+            <div ng-show="showDetails">
+              <p><strong>Title: </strong>{{articulo.title}}</p>
+              <p><strong>Price: </strong>{{articulo.price | currency}}</p>
+              <p><strong>Description: </strong>{{articulo.description}}</p>
+              <p><strong>Location: </strong>{{articulo.location}}</p>
+              <p><strong>Phone: </strong>{{articulo.phone}}</p>
+              <p><strong>Email: </strong>{{articulo.email}}</p>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--  POST -->
+      <div  ng-hide="searchText.length||!tab.isSet(0)||prefs" class="col-md-8">
+        <form name="articuloForm" ng-controller="ItemController as articuloCtrl" ng-submit="articuloForm.$valid && articuloCtrl.addarticulo(product)" novalidate>
+          <!--  Post Form -->
+          <fieldset class="form-group">
+            <strong>Title: </strong>
+            <textarea ng-model="articuloCtrl.articulo.title" class="form-control" type="text" placeholder="title of your post..." title="Title" required></textarea>
+          </fieldset>
+          <fieldset class="form-group">
+            <strong>Description: </strong>
+            <textarea ng-model="articuloCtrl.articulo.description" class="form-control" type="text" placeholder="Description of your product goes here..." title="Description" required></textarea>
+          </fieldset>
+          <fieldset class="form-group">
+            <strong>Price: </strong>
+            <input ng-model="articuloCtrl.articulo.price" type="number" min="1" max="9999" size="4" class="form-control" placeholder="price" title="Description" style="width:20%;" required/>
+          </fieldset>
+          <fieldset class="form-group">
+            <strong>Location: </strong>
+            <input ng-model="articuloCtrl.articulo.location" type="text" class="form-control" placeholder="San Francisco" title="Location" style="width:40%;" required/>
+          </fieldset>
+          <fieldset class="form-group">
+            <strong>Phone Number: </strong>
+            <input ng-model="articuloCtrl.articulo.phone" type='tel' pattern='\d{3}[\-]\d{3}[\-]\d{4}' title='Phone' class="form-control" placeholder="ex: 209-603-2050" style="width:30%;" required/>
+          </fieldset>
+          <fieldset class="form-group">
+            <strong>Email: </strong>
+            <input ng-model="articuloCtrl.articulo.email" type="email" class="form-control" placeholder="jimmyDean@example.org" title="Email" style="width:50%;" required/>
+          </fieldset>
+          <fieldset class="form-group">
+            <input type="submit" class="btn btn-info" value="Submit articulo" />
+          </fieldset>
+          <fieldset class="form-group">
+            <input type="button" onclick="window.location='calculate.html';" class="btn btn-info" value="Calculate your profit" />
+          </fieldset>
+        </form>
+      </div>
+    </section>
+  </div>
+
+   <div class="footer"></div>
+  </div>
+
+  <div class="col-md-2">
+  </div>
+</div>
+
+  </body>
+</html>
